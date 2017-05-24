@@ -7,6 +7,7 @@ import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import index from './routes/index';
+import userRoute from './routes/users';
 
 import Knex = require('knex');
 import { MySqlConnectionConfig } from 'knex';
@@ -49,9 +50,11 @@ app.use((req, res, next) => {
     debug: true,
     acquireConnectionTimeout: 5000
   });
+  next();
 });
 
 app.use('/', index);
+app.use('/users', userRoute);
 
 //catch 404 and forward to error handler
 app.use((req,res,next) => {
