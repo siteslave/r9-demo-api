@@ -15,7 +15,12 @@ export class Jwt {
     });
   }
 
-  verify() {
-
+  verify(token: string) {
+    return new Promise((resolve, reject) => {
+      jwt.verify(token, this.secretKey, (error, decoded) => {
+        if (error) reject(error);
+        else resolve(decoded);
+      });
+    });
   }
 }

@@ -4,9 +4,12 @@ import * as express from 'express';
 import * as crypto from 'crypto';
 
 import { UserModel, IUser } from '../models/user';
+import { Jwt } from '../models/jwt';
 
 const router = express.Router();
 const userModel = new UserModel();
+
+const jwt = new Jwt();
 
 router.post('/',(req, res, next) => {
   let username = req.body.username;
@@ -24,8 +27,16 @@ router.post('/',(req, res, next) => {
         let username = rows[0].username;
         let id = rows[0].id;
         let fullname = rows[0].fullname;
+        let payload = { fullname: fullname, id: id };
 
-        res.send({ ok: true, token: 'xxxxxxx', fullname: fullname, id: id });
+        jwt.singn(payload)
+          .then((token: any) => {
+            res.send({ ok: true, token: token });
+          })
+          .catch((error: any) => {
+            res.send({ ok: false, error: error });
+          });
+
       } else { // failed
         res.send({ ok: false, error: 'ชื่อผู้ใช้งาน/รหัสผ่าน ไม่ถูกต้อง' });
       }
