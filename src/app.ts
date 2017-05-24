@@ -11,6 +11,7 @@ import userRoute from './routes/users';
 
 import Knex = require('knex');
 import { MySqlConnectionConfig } from 'knex';
+import * as cors from 'cors';
 
 const app: express.Express = express();
 
@@ -24,7 +25,9 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(cors());
 
 let connection: MySqlConnectionConfig = {
   host: 'localhost',
