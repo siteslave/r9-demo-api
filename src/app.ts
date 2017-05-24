@@ -8,6 +8,7 @@ import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import index from './routes/index';
 import userRoute from './routes/users';
+import studentRoute from './routes/students';
 
 import Knex = require('knex');
 import { MySqlConnectionConfig } from 'knex';
@@ -58,6 +59,7 @@ app.use((req, res, next) => {
 
 app.use('/', index);
 app.use('/users', userRoute);
+app.use('/students', studentRoute);
 
 //catch 404 and forward to error handler
 app.use((req, res, next) => {
