@@ -14,6 +14,9 @@ import Knex = require('knex');
 import { MySqlConnectionConfig } from 'knex';
 import * as cors from 'cors';
 
+import { Jwt } from './models/jwt';
+const jwt = new Jwt();
+
 const app: express.Express = express();
 
 //view engine setup
@@ -57,9 +60,33 @@ app.use((req, res, next) => {
   next();
 });
 
+let auth = (req, res, next) => {
+  let token = null;
+  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+    token = req.headers.authorization.split(' ')[1];
+  } else if (req.query && req.query.token) {
+    token = req.query.token;
+  } else if (req.body && req.body.token) {
+    token = req.body.token;
+  }
+
+  jwt.verify(token)
+    .then((decoded: any) => {
+      req.decoded = decoded;
+      next();
+    })
+    .catch(error => {
+      return res.send({
+        ok: false,
+        error: 'No token provided.',
+        code: 403
+      });
+    });
+}
+
 app.use('/', index);
 app.use('/users', userRoute);
-app.use('/students', studentRoute);
+app.use('/students', auth, studentRoute);
 
 //catch 404 and forward to error handler
 app.use((req, res, next) => {
