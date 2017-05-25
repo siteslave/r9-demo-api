@@ -4,8 +4,10 @@ import * as express from 'express';
 const router = express.Router();
 
 import { StudentModel } from '../models/student';
+import { Encrypt } from '../models/encrypt';
 
 const studentModel = new StudentModel();
+const encrypt = new Encrypt();
 
 router.get('/list/:limit/:offset', (req, res, next) => {
   let db = req.db;
@@ -14,7 +16,10 @@ router.get('/list/:limit/:offset', (req, res, next) => {
 
   studentModel.getList(db, limit, offset)
     .then((rows: any) => {
-      res.send({ ok: true, rows: rows });
+      let strData = JSON.stringify(rows);
+      let encText = encrypt.encrypt(strData);
+
+      res.send({ ok: true, data: encText });
     })
     .catch((error: any) => {
       res.send({ ok: false, error: error.message });
