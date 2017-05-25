@@ -9,12 +9,12 @@ import { Encrypt } from '../models/encrypt';
 const studentModel = new StudentModel();
 const encrypt = new Encrypt();
 
-router.get('/list/:limit/:offset', (req, res, next) => {
+router.get('/list', (req, res, next) => {
   let db = req.db;
-  let limit = +req.params.limit;
-  let offset = +req.params.offset;
+  // let limit = +req.params.limit;
+  // let offset = +req.params.offset;
 
-  studentModel.getList(db, limit, offset)
+  studentModel.getList(db)
     .then((rows: any) => {
       let strData = JSON.stringify(rows);
       let encText = encrypt.encrypt(strData);
@@ -33,6 +33,22 @@ router.get('/total', (req, res, next) => {
       res.send({ ok: true, total: rows[0].total });
     })
     .catch((error: any) => {
+      res.send({ ok: false, error: error.message });
+    });
+});
+
+router.post('/register-device', (req, res, next) => {
+  let db = req.db;
+
+  let deviceToken = req.body.deviceToken;
+  let id = req.body.id;
+  console.log(req.body);
+  studentModel.registerDevice(db, id, deviceToken)
+    .then((rows: any) => {
+      res.send({ ok: true });
+    })
+    .catch((error: any) => {
+      console.log(error);
       res.send({ ok: false, error: error.message });
     });
 });

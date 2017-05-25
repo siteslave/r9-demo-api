@@ -34,10 +34,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 let connection: MySqlConnectionConfig = {
-  host: 'localhost',
+  host: '192.168.10.93',
   port: 3306,
-  user: 'root',
-  password: '043789124',
+  user: 'sa',
+  password: 'sa',
   database: 'ionic_test'
 }
 
