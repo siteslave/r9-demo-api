@@ -95,30 +95,10 @@ app.use((req, res, next) => {
   next(err);
 });
 
-//error handlers
-
-//development error handler
-//will print stacktrace
-if (process.env.NODE_ENV === 'development') {
-  app.use((err: Error, req, res, next) => {
-    res.status(err['status'] || 500);
-    res.render('error', {
-      title: 'error',
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-//production error handler
-// no stacktrace leaked to user
 app.use((err: Error, req, res, next) => {
   res.status(err['status'] || 500);
-  res.render('error', {
-    title: 'error',
-    message: err.message,
-    error: {}
-  });
+  console.log(err);
+  res.send({ ok: false, error: err.message });
 });
 
 export default app;
