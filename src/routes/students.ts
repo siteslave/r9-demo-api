@@ -53,4 +53,30 @@ router.post('/register-device', (req, res, next) => {
     });
 });
 
+router.get('/users-list', (req, res, next) => {
+  let db = req.db;
+
+  studentModel.getUsers(db)
+    .then((rows: any) => {
+      res.send({ ok: true, rows: rows });
+    })
+    .catch((error: any) => {
+      console.log(error);
+      res.send({ ok: false, error: error.message });
+    });
+});
+
+router.get('/groups-list', (req, res, next) => {
+  let db = req.db;
+
+  studentModel.getGroups(db)
+    .then((rows: any) => {
+      res.send({ ok: true, rows: rows });
+    })
+    .catch((error: any) => {
+      console.log(error);
+      res.send({ ok: false, error: error.message });
+    });
+});
+
 export default router;

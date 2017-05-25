@@ -20,5 +20,15 @@ export class StudentModel {
       })
       .where('id', id);
   }
+
+  getUsers(knex: Knex) {
+    return knex('users')
+    .select('id', 'fullname')
+  }
+
+  getGroups(knex: Knex) {
+    return knex('groupid')
+  }
+
 }
 
