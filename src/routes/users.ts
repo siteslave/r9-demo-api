@@ -6,14 +6,22 @@ import * as crypto from 'crypto';
 import { UserModel, IUser } from '../models/user';
 import { Jwt } from '../models/jwt';
 
+import { Encrypt } from '../models/encrypt';
+
 const router = express.Router();
 const userModel = new UserModel();
+const encrypt = new Encrypt();
 
 const jwt = new Jwt();
 
 router.post('/',(req, res, next) => {
-  let username = req.body.username;
-  let password = req.body.password;
+  let data = req.body.data;
+  let decryptedText = encrypt.decrypt(data);
+  let objData = JSON.parse(decryptedText);
+
+  let username = objData.username;
+  let password = objData.password;
+
   let db = req.db;
 
   let encPassword = crypto.createHash('md5')
