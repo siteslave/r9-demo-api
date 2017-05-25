@@ -30,5 +30,11 @@ export class StudentModel {
     return knex('groupid')
   }
 
+  getUserTokenById(knex: Knex, ids: any[]) {
+    return knex('users')
+      .select('device_token')
+      .whereIn('id', ids);
+  }
+
 }
 

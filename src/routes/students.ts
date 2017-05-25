@@ -1,6 +1,8 @@
 'use strict';
 
 import * as express from 'express';
+import * as gcm from 'node-gcm';
+
 const router = express.Router();
 
 import { StudentModel } from '../models/student';
@@ -72,6 +74,46 @@ router.get('/groups-list', (req, res, next) => {
   studentModel.getGroups(db)
     .then((rows: any) => {
       res.send({ ok: true, rows: rows });
+    })
+    .catch((error: any) => {
+      console.log(error);
+      res.send({ ok: false, error: error.message });
+    });
+});
+
+router.post('/send-message', (req, res, next) => {
+  let db = req.db;
+  let ids = req.body.ids;
+  let msg = req.body.msg;
+
+  studentModel.getUserTokenById(db, ids)
+    .then((rows: any) => {
+      let deviceTokens = [];
+      rows.forEach(v => {
+        deviceTokens.push(v.device_token);
+      });
+
+      // ============ send message ==============//
+
+      var message = new gcm.Message();
+      message.addData('title', 'ข้อความแจ้งเตือน');
+      message.addData('message', msg);
+      message.addData('content-available', 'true');
+      message.addData('image', 'http://www.pro.moph.go.th/w54/images/ICT/loadlogomoph.png');
+
+      // Set up the sender with you API key, prepare your recipients' registration tokens. 
+      var sender = new gcm.Sender("AAAAb4spfAw:APA91bHaFQNmxllixo7WZ4L1x1oPW9ypyyRZUE-b64oTDZ4SQPUETubmVzFGocH7mIxcCXqoYqCFaf7Rjq1GO73oQqEqf7sgdp9ZdD5WvBWXVEkN8vI2iRN9041qiV24I2WIX0Z5gEjh");
+      // var regTokens = ["fGsRFhYwfXM:APA91bGYqXzizSPSefLFV5VynVgd82a_4NyJwtqwQLGNZzYZ3qBLGQgXYkqIsWfEaVWT2T-WnDrqyIIFWMYb2XPFmaI-eYCeaU07dJB9VZZiMe6XtA8PjZK_Veai1-GTZt_9HASSrp_d"];
+
+      sender.send(message, { registrationTokens: deviceTokens }, (err, response) => {
+        if (err) {
+          console.log(err);
+          res.send({ ok: false, error: err });
+        } else {
+          res.send({ ok: true, result: response })
+        }
+      });
+      // ========================================
     })
     .catch((error: any) => {
       console.log(error);
