@@ -33,6 +33,7 @@ export class StudentModel {
   getUserTokenById(knex: Knex, ids: any[]) {
     return knex('users')
       .select('device_token')
+      .whereNotNull('device_token')
       .whereIn('id', ids);
   }
 
