@@ -12,7 +12,6 @@ export class Encrypt {
   decrypt(enc: string) {
     let bytes = CryptoJs.AES.decrypt(enc, this.encKey);
     let plaintext = bytes.toString(CryptoJs.enc.Utf8);
-
     return plaintext;
   }
 }
