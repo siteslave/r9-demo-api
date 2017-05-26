@@ -112,6 +112,25 @@ router.get('/get-image/:id', (req, res, next) => {
     });
 });
 
+router.get('/preview-image/:id', (req, res, next) => {
+  let db = req.db;
+  let id = req.params.id;
+
+  studentModel.getImage(db, id)
+    .then((rows: any) => {
+      var img = new Buffer(rows[0].image.toString(), 'base64');
+      res.writeHead(200, {
+        'Content-Type': 'image/jpeg',
+        'Content-Length': img.length
+      });
+      res.end(img);
+    })
+    .catch((error: any) => {
+      console.log(error);
+      res.send({ ok: false, error: error.message });
+    });
+});
+
 router.post('/send-message', (req, res, next) => {
   let db = req.db;
   let ids = req.body.ids;
