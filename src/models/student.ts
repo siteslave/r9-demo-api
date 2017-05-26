@@ -43,5 +43,11 @@ export class StudentModel {
       .where('id', id);
   }
 
+  getImage(knex: Knex, id: any) {
+    return knex('users')
+      .select('image')
+      .where('id', id);
+  }
+
 }
 

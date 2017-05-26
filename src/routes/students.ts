@@ -96,6 +96,22 @@ router.post('/save-image', (req, res, next) => {
     });
 });
 
+router.get('/get-image/:id', (req, res, next) => {
+  let db = req.db;
+  let id = req.params.id;
+
+  studentModel.getImage(db, id)
+    .then((rows: any) => {
+      let image = rows[0].image.toString();
+      console.log(image);
+      res.send({ ok: true, image: image });
+    })
+    .catch((error: any) => {
+      console.log(error);
+      res.send({ ok: false, error: error.message });
+    });
+});
+
 router.post('/send-message', (req, res, next) => {
   let db = req.db;
   let ids = req.body.ids;
