@@ -1,5 +1,5 @@
 var gcm = require('node-gcm');
- 
+
 var message = new gcm.Message();
 message.addData('title', 'ประกาศ');
 message.addData('message', 'ทดสอบการส่ง Push notification');

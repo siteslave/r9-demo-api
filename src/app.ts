@@ -26,7 +26,7 @@ app.set('view engine', 'pug');
 //uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname,'public','favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '10m'}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,10 +34,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 let connection: MySqlConnectionConfig = {
-  host: '192.168.10.93',
+  host: 'localhost',
   port: 3306,
-  user: 'sa',
-  password: 'sa',
+  user: 'root',
+  password: '043789124',
   database: 'ionic_test'
 }
 

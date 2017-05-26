@@ -81,6 +81,21 @@ router.get('/groups-list', (req, res, next) => {
     });
 });
 
+router.post('/save-image', (req, res, next) => {
+  let db = req.db;
+  let id = req.body.id;
+  let image = req.body.image;
+
+  studentModel.saveImage(db, id, image)
+    .then((rows: any) => {
+      res.send({ ok: true });
+    })
+    .catch((error: any) => {
+      console.log(error);
+      res.send({ ok: false, error: error.message });
+    });
+});
+
 router.post('/send-message', (req, res, next) => {
   let db = req.db;
   let ids = req.body.ids;

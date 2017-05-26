@@ -37,5 +37,11 @@ export class StudentModel {
       .whereIn('id', ids);
   }
 
+  saveImage(knex: Knex, id: any, image: string) {
+    return knex('users')
+      .update('image', image)
+      .where('id', id);
+  }
+
 }
 
